@@ -1,0 +1,160 @@
+﻿<Window x:Class="prakt_21._1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:prakt_21._1"
+        
+        mc:Ignorable="d"
+        Title="Практическая работа №21" Height="450" Width="725" Loaded="Window_Loaded" Icon="/pepper_vegetables_vegetable_food_agriculture_icon_220788.ico" ResizeMode="CanMinimize">
+    <Window.Resources>
+        <ResourceDictionary>
+            <local:ListConverter x:Key="ListConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu VerticalAlignment="Top" Height="20" Grid.Row="0">
+            <MenuItem Header="Поиск" Click="Search_Click"></MenuItem>
+            <MenuItem Header="О программе" Click="Info_Click"></MenuItem>
+            <MenuItem Header="Выход" Click="Exit_Click"></MenuItem>
+        </Menu>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Главная форма">
+                <Grid>
+                    <DataGrid x:Name="productCatalog" IsReadOnly="True" AutoGenerateColumns="False" HorizontalAlignment="Center" Height="270" Margin="0,20,0,0" VerticalAlignment="Top" Width="661">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Код" Binding="{Binding Id}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Наименование" Binding="{Binding Name}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Ед. изм." Binding="{Binding Unit}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Цех" Binding="{Binding ShopCatalog.Name}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Группа продукции" Binding="{Binding ProductGroup1.Name}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat={}{0:f2} руб.}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Content="Добавить запись" HorizontalAlignment="Left" Margin="22,304,0,0" VerticalAlignment="Top" Click="AddProduct_Click" Width="131" Height="25"/>
+                    <Button Content="Изменить запись" HorizontalAlignment="Left" Margin="200,304,0,0" VerticalAlignment="Top" Click="EditProduct_Click" Width="132" Height="25"/>
+                    <Button Content="Удалить запись" HorizontalAlignment="Left" Margin="384,304,0,0" VerticalAlignment="Top" Click="DeleteProduct" Width="131" Height="25"/>
+                    <Button Content="Увеличить цену на 15%" HorizontalAlignment="Left" Margin="547,304,0,0" VerticalAlignment="Top" Width="137" Height="25" Click="IncreasePrice"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Цеха и группы">
+                <Grid>
+                    <GroupBox Header="Цеха изготовители" Margin="57,10,472,22">
+                        <Grid>
+                            <DataGrid x:Name="shopCatalog" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="270" Margin="20,10,0,0" VerticalAlignment="Top" Width="134" BeginningEdit="shopCatalog_BeginningEdit" CellEditEnding="shopCatalog_CellEditEnding">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Наименование" Binding="{Binding Name}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Content="Удалить запись" HorizontalAlignment="Left" Margin="38,288,0,0" VerticalAlignment="Top" Width="98" Click="Del_Workshop"/>
+
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Группы продукции" Margin="258,10,10,22">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="142*"/>
+                                <RowDefinition Height="189*"/>
+                            </Grid.RowDefinitions>
+                            <DataGrid x:Name="productGroup" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="270" Margin="0,10,0,0" VerticalAlignment="Top" Width="289" BeginningEdit="productGroup_BeginningEdit" CellEditEnding="productGroup_CellEditEnding" Grid.RowSpan="2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Наименование" Binding="{Binding Name}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Content="Удалить запись" HorizontalAlignment="Left" Margin="92,150,0,0" VerticalAlignment="Top" Width="100" Click="Del_Group" Grid.Row="1"/>
+                            <Button Content="Добавить" HorizontalAlignment="Left" Margin="330,80,0,0" VerticalAlignment="Top" Click="AddGroupProduct"/>
+                            <TextBox x:Name="nameText" HorizontalAlignment="Left" Margin="298,57,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+                            <Label Content="Введите наименование" HorizontalAlignment="Left" Margin="289,26,0,0" VerticalAlignment="Top"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="План">
+                <Grid>
+                    <DataGrid x:Name="plan" IsReadOnly="True" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="270" Margin="89,20,0,0" VerticalAlignment="Top" Width="522">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Код" Binding="{Binding Id}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Наименование продукции" Binding="{Binding ProductCatalog.Name}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Количество" Binding="{Binding Count}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Номер месяца" Binding="{Binding Month}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Content="Добавить запись" HorizontalAlignment="Left" Margin="89,299,0,0" VerticalAlignment="Top" Width="131" Height="25" Click="AddPlan_Click"/>
+                    <Button Content="Изменить запись" HorizontalAlignment="Left" Margin="284,299,0,0" VerticalAlignment="Top" Width="132" Height="25" Click="EditPlane_Click"/>
+                    <Button Content="Удалить запись" HorizontalAlignment="Left" Margin="480,299,0,0" VerticalAlignment="Top" Width="131" Height="25" Click="DeletePlane_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Запросы">
+                <Grid>
+                    <GroupBox Header="Количество наименований продукции" Margin="7,20,397,71">
+                        <Grid>
+                            <DataGrid x:Name="requestOne" AutoGenerateColumns="False" HorizontalAlignment="Center" Height="171" Margin="0,24,0,0" VerticalAlignment="Top" Width="263" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Наименование цеха" Binding="{Binding Shop}"/>
+                                    <DataGridTextColumn Header="Количество продукции" Binding="{Binding Count}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Content="Отобразить" HorizontalAlignment="Left" Margin="97,200,0,0" VerticalAlignment="Top" Width="92" Click="RequestOne" Height="33"/>
+
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Стоимость продукции" Margin="322,20,5,71">
+                        <Grid>
+                            <DataGrid x:Name="requestTwo" AutoGenerateColumns="False" HorizontalAlignment="Left" Height="169" Margin="0,24,0,0" VerticalAlignment="Top" Width="361" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Наименование продукции" Binding="{Binding Name}"/>
+                                    <DataGridTextColumn Header="Стоимость продукции" Binding="{Binding Sum, StringFormat=\{0:f2\} руб.}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Content="Отобразить" HorizontalAlignment="Left" Margin="142,198,0,0" VerticalAlignment="Top" Width="92" Height="33" Click="RequestTwo"/>
+
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Еще запросы">
+                <Grid>
+                    <GroupBox Header="План выпуска продукции за месяц" Margin="0,0,10,200">
+                        <Grid>
+                            <DataGrid x:Name="planRequest" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,0,0,28">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Группа продукции" Binding="{Binding Group}"/>
+                                    <DataGridTextColumn Header="Имя продукции" Binding="{Binding Name}"/>
+                                    <DataGridTextColumn Header="Месяц" Binding="{Binding Month}"/>
+                                    <DataGridTextColumn Header="Стоимость" Binding="{Binding Price, StringFormat={}{0:f2} руб.}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Content="Отобразить" HorizontalAlignment="Center" Margin="0,115,0,0" VerticalAlignment="Top" Click="PlanRequest"/>
+
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Продукция количество которой ниже выпускаемого" Margin="345,168,10,0">
+                        <Grid>
+                            <DataGrid AutoGenerateColumns="True" x:Name="workshopData" Margin="10,8,21,31" >
+                            </DataGrid>
+                            <Button Content="Отобразить" HorizontalAlignment="Left" Margin="136,144,0,0" VerticalAlignment="Top" Click="WorkshopRequest"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Сумарное плановое количество" Margin="0,168,379,0">
+                        <Grid>
+                            <DataGrid x:Name="sumData" AutoGenerateColumns="False" Margin="0,10,10,31" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Имя продукции" Binding="{Binding Name}"/>
+                                    <DataGridTextColumn Header="Количество" Binding="{Binding Count}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Content="Отобразить" HorizontalAlignment="Left" Margin="115,144,0,0" VerticalAlignment="Top" Click="SumPlan"/>
+
+                        </Grid>
+                    </GroupBox>
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

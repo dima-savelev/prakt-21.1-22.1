@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище WorkshopModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Plan">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Product" Type="int" Nullable="false" />
+          <Property Name="Count" Type="int" />
+          <Property Name="Month" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="ProductCatalog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
+          <Property Name="Shop" Type="int" Nullable="false" />
+          <Property Name="ProductGroup" Type="int" Nullable="false" />
+          <Property Name="Price" Type="money" />
+        </EntityType>
+        <EntityType Name="ProductGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ShopCatalog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Plan_ProductCatalog">
+          <End Role="ProductCatalog" Type="Self.ProductCatalog" Multiplicity="1" />
+          <End Role="Plan" Type="Self.Plan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCatalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Plan">
+              <PropertyRef Name="Product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductCatalog_ProductGroup">
+          <End Role="ProductGroup" Type="Self.ProductGroup" Multiplicity="1" />
+          <End Role="ProductCatalog" Type="Self.ProductCatalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductCatalog">
+              <PropertyRef Name="ProductGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductCatalog_ShopCatalog">
+          <End Role="ShopCatalog" Type="Self.ShopCatalog" Multiplicity="1" />
+          <End Role="ProductCatalog" Type="Self.ProductCatalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShopCatalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductCatalog">
+              <PropertyRef Name="Shop" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище WorkshopModelContainer">
+          <EntitySet Name="Plan" EntityType="Self.Plan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductCatalog" EntityType="Self.ProductCatalog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductGroup" EntityType="Self.ProductGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShopCatalog" EntityType="Self.ShopCatalog" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Plan_ProductCatalog" Association="Self.FK_Plan_ProductCatalog">
+            <End Role="ProductCatalog" EntitySet="ProductCatalog" />
+            <End Role="Plan" EntitySet="Plan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductCatalog_ProductGroup" Association="Self.FK_ProductCatalog_ProductGroup">
+            <End Role="ProductGroup" EntitySet="ProductGroup" />
+            <End Role="ProductCatalog" EntitySet="ProductCatalog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductCatalog_ShopCatalog" Association="Self.FK_ProductCatalog_ShopCatalog">
+            <End Role="ShopCatalog" EntitySet="ShopCatalog" />
+            <End Role="ProductCatalog" EntitySet="ProductCatalog" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WorkshopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Plan">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Product" Type="Int32" Nullable="false" />
+          <Property Name="Count" Type="Int32" />
+          <Property Name="Month" Type="Byte" />
+          <NavigationProperty Name="ProductCatalog" Relationship="Self.FK_Plan_ProductCatalog" FromRole="Plan" ToRole="ProductCatalog" />
+        </EntityType>
+        <EntityType Name="ProductCatalog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Shop" Type="Int32" Nullable="false" />
+          <Property Name="ProductGroup" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Plans" Relationship="Self.FK_Plan_ProductCatalog" FromRole="ProductCatalog" ToRole="Plan" />
+          <NavigationProperty Name="ProductGroup1" Relationship="Self.FK_ProductCatalog_ProductGroup" FromRole="ProductCatalog" ToRole="ProductGroup" />
+          <NavigationProperty Name="ShopCatalog" Relationship="Self.FK_ProductCatalog_ShopCatalog" FromRole="ProductCatalog" ToRole="ShopCatalog" />
+        </EntityType>
+        <EntityType Name="ProductGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ProductCatalogs" Relationship="Self.FK_ProductCatalog_ProductGroup" FromRole="ProductGroup" ToRole="ProductCatalog" />
+        </EntityType>
+        <EntityType Name="ShopCatalog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ProductCatalogs" Relationship="Self.FK_ProductCatalog_ShopCatalog" FromRole="ShopCatalog" ToRole="ProductCatalog" />
+        </EntityType>
+        <Association Name="FK_Plan_ProductCatalog">
+          <End Role="ProductCatalog" Type="Self.ProductCatalog" Multiplicity="1" />
+          <End Role="Plan" Type="Self.Plan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCatalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Plan">
+              <PropertyRef Name="Product" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductCatalog_ProductGroup">
+          <End Role="ProductGroup" Type="Self.ProductGroup" Multiplicity="1" />
+          <End Role="ProductCatalog" Type="Self.ProductCatalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductCatalog">
+              <PropertyRef Name="ProductGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProductCatalog_ShopCatalog">
+          <End Role="ShopCatalog" Type="Self.ShopCatalog" Multiplicity="1" />
+          <End Role="ProductCatalog" Type="Self.ProductCatalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShopCatalog">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProductCatalog">
+              <PropertyRef Name="Shop" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WorkshopEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Plans" EntityType="Self.Plan" />
+          <EntitySet Name="ProductCatalogs" EntityType="Self.ProductCatalog" />
+          <EntitySet Name="ProductGroups" EntityType="Self.ProductGroup" />
+          <EntitySet Name="ShopCatalogs" EntityType="Self.ShopCatalog" />
+          <AssociationSet Name="FK_Plan_ProductCatalog" Association="Self.FK_Plan_ProductCatalog">
+            <End Role="ProductCatalog" EntitySet="ProductCatalogs" />
+            <End Role="Plan" EntitySet="Plans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductCatalog_ProductGroup" Association="Self.FK_ProductCatalog_ProductGroup">
+            <End Role="ProductGroup" EntitySet="ProductGroups" />
+            <End Role="ProductCatalog" EntitySet="ProductCatalogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProductCatalog_ShopCatalog" Association="Self.FK_ProductCatalog_ShopCatalog">
+            <End Role="ShopCatalog" EntitySet="ShopCatalogs" />
+            <End Role="ProductCatalog" EntitySet="ProductCatalogs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище WorkshopModelContainer" CdmEntityContainer="WorkshopEntities">
+          <EntitySetMapping Name="Plans">
+            <EntityTypeMapping TypeName="WorkshopModel.Plan">
+              <MappingFragment StoreEntitySet="Plan">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Product" ColumnName="Product" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductCatalogs">
+            <EntityTypeMapping TypeName="WorkshopModel.ProductCatalog">
+              <MappingFragment StoreEntitySet="ProductCatalog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Shop" ColumnName="Shop" />
+                <ScalarProperty Name="ProductGroup" ColumnName="ProductGroup" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductGroups">
+            <EntityTypeMapping TypeName="WorkshopModel.ProductGroup">
+              <MappingFragment StoreEntitySet="ProductGroup">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShopCatalogs">
+            <EntityTypeMapping TypeName="WorkshopModel.ShopCatalog">
+              <MappingFragment StoreEntitySet="ShopCatalog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
